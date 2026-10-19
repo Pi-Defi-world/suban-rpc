@@ -1,0 +1,22 @@
+title = "suban-rpc secret scanning"
+
+[extend]
+useDefault = true
+
+# Public Stellar identifiers are not secrets:
+#   G... account addresses, C... contract IDs.
+[[allowlists]]
+description = "Public Stellar account and contract identifiers"
+regexTarget = "line"
+regexes = [
+  '''[GC][A-Z2-7]{55}''',
+]
+
+# Generated files and templates never contain real secrets.
+[[allowlists]]
+description = "Generated files, lockfiles and templates"
+paths = [
+  '''go\.sum''',
+  '''Cargo\.lock''',
+  '''.*\.example''',
+]
