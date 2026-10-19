@@ -22,3 +22,4 @@ soroban-simulation-curr = { workspace = true }
 anyhow = { workspace = true }
 rand = { workspace = true }
 serde_json = { workspace = true }
+ed25519-dalek = { workspace = true }

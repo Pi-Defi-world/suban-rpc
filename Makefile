@@ -60,9 +60,10 @@ CARGO_BUILD_TARGET ?= $(shell rustc -vV | sed -n 's|host: ||p')
 PI_RPC_BINARY := suban-rpc
 
 
-# update the Cargo.lock every time the Cargo.toml changes.
-Cargo.lock: Cargo.toml
-	cargo update --workspace
+# Generate the lockfile once if it is missing. Do not auto-update it on every
+# build: dependency updates must be explicit and reviewed.
+Cargo.lock:
+	cargo generate-lockfile
 
 install: build-libs
 	go install -ldflags="${GOLDFLAGS}" ./...
@@ -72,9 +73,9 @@ build: build-libs
 
 build-libs: Cargo.lock
 	cd cmd/stellar-rpc/lib/preflight && \
-	cargo build --target $(CARGO_BUILD_TARGET) --profile release-with-panic-unwind && \
+	cargo build --locked --target $(CARGO_BUILD_TARGET) --profile release-with-panic-unwind && \
 	cd ../xdr2json && \
-	cargo build --target $(CARGO_BUILD_TARGET) --profile release-with-panic-unwind
+	cargo build --locked --target $(CARGO_BUILD_TARGET) --profile release-with-panic-unwind
 
 check: rust-check go-check
 
