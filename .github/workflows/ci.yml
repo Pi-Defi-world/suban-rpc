@@ -37,6 +37,15 @@ jobs:
       - name: Unit tests (excluding integration and preflight tests)
         run: go test $(go list ./... | grep -v integrationtest | grep -v internal/preflight)
 
+  rust-audit:
+    name: Rust dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest

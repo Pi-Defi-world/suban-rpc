@@ -493,6 +493,13 @@ These methods are supported by the server and follow the same JSON-RPC format:
 
 Tip: params are **always an object** (not an array). (Array params are rejected for backwards-compatibility.)
 
+> **Compatibility note:** `getLedgerEntries` is served by the Go JSON-RPC path
+> and does not use the Rust preflight host. The `internal/preflight` tests
+> currently fail because their fixture targets protocol 25 while the vendored
+> `soroban-env-host` is protocol 23; those tests are excluded from the CI gate
+> while still being compiled. This affects preflight *test coverage*, not the
+> `getLedgerEntries` runtime method. See [COMPATIBILITY.md](./COMPATIBILITY.md).
+
 ## Configuration
 The server can be configured via command-line flags, environment variables, or a TOML configuration file. Environment variables take precedence over the configuration file, and flags take precedence over everything.
 
